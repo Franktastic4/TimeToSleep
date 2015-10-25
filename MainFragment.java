@@ -99,11 +99,10 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void setAlarm(){
 
         Context context = getActivity().getApplicationContext();
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getActivity().getSupportFragmentManager(), "someTag");
         AlarmReciever alarm = new AlarmReciever();
         alarm.SetAlarm(context);
-
 
     }
 

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -38,12 +39,9 @@ public class AlarmReciever extends BroadcastReceiver
     public void SetAlarm(Context context)
     {
 
-        AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager am =(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, AlarmReciever.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-
-        DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(  , "timePicker");
 
         // Get shared preference
         SharedPreferences prefs = context.getSharedPreferences("Time", Context.MODE_PRIVATE);
