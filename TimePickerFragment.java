@@ -18,6 +18,8 @@ import java.util.Calendar;
 public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
 
+    //public TimePickerFragmentCallback mTimePickerFragmentCallback;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current time as the default values for the picker
@@ -42,12 +44,14 @@ public class TimePickerFragment extends DialogFragment
         Alarm alarm = new Alarm();
         alarm.SetAlarm(getActivity().getApplicationContext());
 
+       //mTimePickerFragmentCallback.timeSet();
+
 
     }
 
-    interface TimePickerFragmentCallback {
-        void timeSet();
-    }
+    //static interface TimePickerFragmentCallback {
+    //    void timeSet();
+    //}
 
 
 

@@ -30,7 +30,7 @@ import java.util.Date;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends android.support.v4.app.Fragment implements TimePickerFragment.TimePickerFragmentCallback {
+public class MainFragment extends android.support.v4.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -86,14 +86,14 @@ public class MainFragment extends android.support.v4.app.Fragment implements Tim
         Log.d(TAG, "OnCreateView()");
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
-
-        // TODO remove this, just for testing.
-        prefs.edit().putInt("LockedBoolean", 0).apply();
+        final SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
 
         messageTextField = (TextView) view.findViewById(R.id.msg);
         contactTextField = (TextView) view.findViewById(R.id.contact);
         passwordTextField = (TextView) view.findViewById(R.id.password);
+
+        // TODO remove this, just for testing.
+        prefs.edit().putInt("LockedBoolean", 0).apply();
 
         Button disableButton = (Button) view.findViewById(R.id.disable);
         disableButton.setOnClickListener( new View.OnClickListener() {
@@ -106,12 +106,18 @@ public class MainFragment extends android.support.v4.app.Fragment implements Tim
         });;
 
         Button timeButton = (Button) view.findViewById(R.id.time);
-        timeButton.setOnClickListener( new View.OnClickListener() {
+        timeButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new TimePickerFragment();
-                newFragment.show(getActivity().getSupportFragmentManager(), "someTag");
+                // Must disable before setting new alarm
+                if (prefs.getInt("LockedBoolean", 1) == 0) {
+                    timeSet();
+                    DialogFragment newFragment = new TimePickerFragment();
+                    newFragment.show(getActivity().getSupportFragmentManager(), "someTag");
+                }else{
+                    Log.d(TAG, "Disable current alarm first");
+                }
             }
         });
 
@@ -122,15 +128,13 @@ public class MainFragment extends android.support.v4.app.Fragment implements Tim
                 if (prefs.getInt("LockedBoolean", 0) == 1) {
                     Log.d(TAG, "Touch detected after alarm!");
                     misbehaved();
-                }else{
+                } else {
                     Log.d(TAG, "Touch detected, but is ok");
                 }
 
-                    return false;
+                return false;
             }
         });
-
-
         // Inflate the layout for this fragment
         return view;
     }
@@ -139,29 +143,37 @@ public class MainFragment extends android.support.v4.app.Fragment implements Tim
         Log.d(TAG, "Attempt to disable alarm");
         SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
 
-        if(passwordTextField.equals(prefs.getString("Password", "ladvbuyiadfbvpidaobodifv"))){
-            Log.d(TAG, "Eligible to remove alarm");
+        if(passwordTextField.getText().toString().equals(prefs.getString("Password", "ladvbuyiadfbvpidaobodifv"))){
+            Log.d(TAG, "Removing alarm");
             Log.d(TAG, "Will not alert: " + prefs.getString("Contact", ""));
+            prefs.edit().putInt("LockedBoolean",0).apply();
+        }else{
+            Log.d(TAG, "Incorrect password! Alarm is still enabled");
         }
+
+
 
     }
 
     public void misbehaved(){
-        Log.d(TAG, "You misbehaved. I'm going to tell on you.");
+        Log.d(TAG, "You misbehaved. I'm going to tell on you!");
 
+        //Twilio stuff
 
     }
 
     public void timeSet(){
+
         SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
-        Log.d(TAG, "Callback from timeset");
+        //Log.d(TAG, "Callback from timeset");
         // if we went from 0->1, means we save the message, contact, and password.
-        if(prefs.getInt("LockedBoolean",0) == 1){
-            prefs.edit().putString("Message", messageTextField.getText().toString());
-            prefs.edit().putString("Contact", contactTextField.getText().toString());
-            prefs.edit().putString("Password", passwordTextField.getText().toString());
+        //if(prefs.getInt("LockedBoolean",0) == 1){
+
+            prefs.edit().putString("Message", messageTextField.getText().toString()).apply();
+            prefs.edit().putString("Contact", contactTextField.getText().toString()).apply();
+            prefs.edit().putString("Password", passwordTextField.getText().toString()).apply();
             passwordTextField.setText("");
-        }
+        //}
 
     }
 
