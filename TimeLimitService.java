@@ -11,7 +11,7 @@ import android.os.IBinder;
  */
 public class TimeLimitService extends Service {
 
-    AlarmReciever alarm = new AlarmReciever();
+    Alarm alarm = new Alarm();
     public void onCreate()
     {
         super.onCreate();

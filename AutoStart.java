@@ -9,7 +9,7 @@ import android.content.Intent;
 
 public class AutoStart extends BroadcastReceiver
 {
-    AlarmReciever alarm = new AlarmReciever();
+    Alarm alarm = new Alarm();
     @Override
     public void onReceive(Context context, Intent intent)
     {

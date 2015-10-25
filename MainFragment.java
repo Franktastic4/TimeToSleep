@@ -101,7 +101,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         Context context = getActivity().getApplicationContext();
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getActivity().getSupportFragmentManager(), "someTag");
-        AlarmReciever alarm = new AlarmReciever();
+        Alarm alarm = new Alarm();
         alarm.SetAlarm(context);
 
     }
