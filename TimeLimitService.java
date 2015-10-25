@@ -38,7 +38,7 @@ public class TimeLimitService extends Service {
         if (pm.isScreenOn()){
             Log.d(TAG, "Your Screen is on!");
 
-            Message message = new Message();
+            SMSMessage message = new SMSMessage();
             try {
                 String[] test = {"3","4","5"};
                 message.main(test);

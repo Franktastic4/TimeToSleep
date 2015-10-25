@@ -81,6 +81,11 @@ public class MainFragment extends android.support.v4.app.Fragment {
         Log.d(TAG, "OnCreateView()");
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+        SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
+
+        // TODO remove this, just for testing.
+        prefs.edit().putInt("LockedBoolean", 0).apply();
+
         Button timeButton = (Button) view.findViewById(R.id.time);
         timeButton.setOnClickListener( new View.OnClickListener() {
 

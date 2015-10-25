@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -32,6 +33,8 @@ public class TimePickerFragment extends DialogFragment
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Put into shared preference
         SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
+
+        Log.d("TimePickerFragment", "This is the current state: " + prefs.getInt("LockedBoolean",0));
 
         prefs.edit().putInt("Time_hour", hourOfDay).apply();
         prefs.edit().putInt("Time_mins", minute).apply();
