@@ -19,8 +19,8 @@ public class TimeLimitService extends Service {
     public void onCreate()
     {
         super.onCreate();
-        Log.d(TAG, "Locking access");
-        // impliment the on click listener
+        Log.d(TAG, "Service has started");
+        // implement the on click listener
 
 
     }

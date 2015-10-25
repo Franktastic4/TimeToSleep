@@ -77,6 +77,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Log.d(TAG, "OnCreateView()");
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         Button timeButton = (Button) view.findViewById(R.id.time);
@@ -84,8 +85,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onClick(View v) {
-                // Time is saved into preferences
-                setAlarm();
+                DialogFragment newFragment = new TimePickerFragment();
+                newFragment.show(getActivity().getSupportFragmentManager(), "someTag");
             }
         });
 
@@ -94,17 +95,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
         return view;
     }
 
-
-    // Sets timer to run app
-    public void setAlarm(){
-
-        Context context = getActivity().getApplicationContext();
-        DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getActivity().getSupportFragmentManager(), "someTag");
-        Alarm alarm = new Alarm();
-        alarm.SetAlarm(context);
-
-    }
 
     // Enable button pressed
     public void enableTimeToSleep(){

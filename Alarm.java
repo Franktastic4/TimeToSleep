@@ -35,20 +35,30 @@ public class Alarm extends BroadcastReceiver
         wl.acquire();
 
         // Put here YOUR code.
-        Log.d(TAG, "Locking Now!");
+
+        Log.d(TAG, "Intent received");
         SharedPreferences prefs = context.getSharedPreferences("Time", Context.MODE_PRIVATE);
-        prefs.edit().putInt("LockedBoolean", 1).apply();
+
+        // If its already on
 
         if(prefs.getInt("LockedBoolean", 0) == 1){
-            Log.d(TAG, "Start Serivce");
-            context.startService(new Intent(context, TimeLimitService.class));
-        }else{
+
+            Log.d(TAG, "Ending the service");
+
+            prefs.edit().putInt("LockedBoolean", 0).apply();
             context.stopService(new Intent(context, TimeLimitService.class));
-            prefs.edit().putInt("LockedBoolean", 0);
             Log.d(TAG, "Service Stopped");
 
             CancelAlarm(context);
             Log.d(TAG, "Alarm Canceled");
+
+
+
+        }else{ // If it is off
+            prefs.edit().putInt("LockedBoolean", 1).apply();
+            Log.d(TAG, "Starting Serivce");
+            context.startService(new Intent(context, TimeLimitService.class));
+
         }
 
 
@@ -73,29 +83,18 @@ public class Alarm extends BroadcastReceiver
         date.setMinutes(minutes);
         calender.setTime(date);
 
-        Log.d(TAG, "Set Alarm to: " + calender.getTime().toString());
+        // Run if not equal to or in past
+        if(calender.getTimeInMillis() > System.currentTimeMillis()){
+            Log.d(TAG, "Alarm Created and set to: " + calender.getTime().toString() );
+            AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+            Intent i = new Intent(context, Alarm.class);
+            PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+            am.set(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), pi);
 
-        AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(context, Alarm.class);
-        PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-
-        // Clear current Alarms
-        CancelAlarm(context);
-
-        // Only runs it once
-        am.set(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), pi);
-
-        // Cancel if alarm is in past
-        if(calender.getTimeInMillis() < System.currentTimeMillis()){
-            CancelAlarm(context);
+            //reset preferences, won't accidentally create more alarms
+            prefs.edit().putInt("Time_hour", Calendar.getInstance().getTime().getHours()).apply();
+            prefs.edit().putInt("Time_mins", Calendar.getInstance().getTime().getMinutes()).apply();
         }
-
-        /*
-        AlarmManager amm =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent ii = new Intent(context, Alarm.class);
-        PendingIntent pii = PendingIntent.getBroadcast(context, 0, ii, 0);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 1, pii);
-        */
 
     }
 

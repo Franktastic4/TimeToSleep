@@ -36,5 +36,8 @@ public class TimePickerFragment extends DialogFragment
         prefs.edit().putInt("Time_hour", hourOfDay).apply();
         prefs.edit().putInt("Time_mins", minute).apply();
 
+        Alarm alarm = new Alarm();
+        alarm.SetAlarm(getActivity().getApplicationContext());
+
     }
 }
