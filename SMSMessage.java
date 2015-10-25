@@ -18,8 +18,8 @@ import org.apache.http.message.BasicNameValuePair;
 public class SMSMessage{
 
     // Find your Account Sid and Token at twilio.com/user/account
-    public static final String ACCOUNT_SID = "AC58dbdc4dbfe5c92ba3de5d03e8063da6";
-    public static final String AUTH_TOKEN = "{{ a3750e8f17a0c4290b4165ad2fa5c3e3 }}";
+    public static final String ACCOUNT_SID = "AC177eacda37327f6a589fc592cdc5efa0";
+    public static final String AUTH_TOKEN = "c1cea8d87cf075b802ebfe0c89d9cdb5";
 
     public static void main(String[] args) throws TwilioRestException {
         TwilioRestClient client = new TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN);

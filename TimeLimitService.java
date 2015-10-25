@@ -35,13 +35,14 @@ public class TimeLimitService extends Service {
         // implement the on click listener
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
+
         if (pm.isScreenOn()){
             Log.d(TAG, "Your Screen is on!");
 
-            SMSMessage message = new SMSMessage();
+            //SMSMessage message = new SMSMessage();
             try {
-                String[] test = {"3","4","5"};
-                message.main(test);
+                //String[] test = {"3","4","5"};
+                //message.main(test);
             }catch (Exception e){
                 e.printStackTrace();
             }
