@@ -34,7 +34,7 @@ public class TimePickerFragment extends DialogFragment
         // Put into shared preference
         SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
 
-        Log.d("TimePickerFragment", "This is the current state: " + prefs.getInt("LockedBoolean",0));
+        Log.d("TimePickerFragment", "This is the current state: " + prefs.getInt("LockedBoolean", 0));
 
         prefs.edit().putInt("Time_hour", hourOfDay).apply();
         prefs.edit().putInt("Time_mins", minute).apply();
@@ -42,5 +42,14 @@ public class TimePickerFragment extends DialogFragment
         Alarm alarm = new Alarm();
         alarm.SetAlarm(getActivity().getApplicationContext());
 
+
     }
+
+    interface TimePickerFragmentCallback {
+        void timeSet();
+    }
+
+
+
+
 }

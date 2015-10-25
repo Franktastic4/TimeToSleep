@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -29,12 +30,16 @@ import java.util.Date;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends android.support.v4.app.Fragment {
+public class MainFragment extends android.support.v4.app.Fragment implements TimePickerFragment.TimePickerFragmentCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "MainFragment";
+
+    TextView messageTextField;
+    TextView contactTextField;
+    TextView passwordTextField;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -86,6 +91,20 @@ public class MainFragment extends android.support.v4.app.Fragment {
         // TODO remove this, just for testing.
         prefs.edit().putInt("LockedBoolean", 0).apply();
 
+        messageTextField = (TextView) view.findViewById(R.id.msg);
+        contactTextField = (TextView) view.findViewById(R.id.contact);
+        passwordTextField = (TextView) view.findViewById(R.id.password);
+
+        Button disableButton = (Button) view.findViewById(R.id.disable);
+        disableButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Attempt to disable alarm
+                disableAlarm();
+            }
+        });;
+
         Button timeButton = (Button) view.findViewById(R.id.time);
         timeButton.setOnClickListener( new View.OnClickListener() {
 
@@ -102,6 +121,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
                 SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
                 if (prefs.getInt("LockedBoolean", 0) == 1) {
                     Log.d(TAG, "Touch detected after alarm!");
+                    misbehaved();
                 }else{
                     Log.d(TAG, "Touch detected, but is ok");
                 }
@@ -115,27 +135,36 @@ public class MainFragment extends android.support.v4.app.Fragment {
         return view;
     }
 
+    public void disableAlarm(){
+        Log.d(TAG, "Attempt to disable alarm");
+        SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
 
-    // Enable button pressed
-    public void enableTimeToSleep(){
+        if(passwordTextField.equals(prefs.getString("Password", "ladvbuyiadfbvpidaobodifv"))){
+            Log.d(TAG, "Eligible to remove alarm");
+            Log.d(TAG, "Will not alert: " + prefs.getString("Contact", ""));
+        }
 
-        // open shared preference
+    }
 
-        // get time
-
-        // get msg
-
-        // get alert
+    public void misbehaved(){
+        Log.d(TAG, "You misbehaved. I'm going to tell on you.");
 
 
     }
 
-    public void disableTimeToSleep(){
-
-        // Open shared preference, get password and compare
-
+    public void timeSet(){
+        SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
+        Log.d(TAG, "Callback from timeset");
+        // if we went from 0->1, means we save the message, contact, and password.
+        if(prefs.getInt("LockedBoolean",0) == 1){
+            prefs.edit().putString("Message", messageTextField.getText().toString());
+            prefs.edit().putString("Contact", contactTextField.getText().toString());
+            prefs.edit().putString("Password", passwordTextField.getText().toString());
+            passwordTextField.setText("");
+        }
 
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
