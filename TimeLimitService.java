@@ -4,17 +4,25 @@ import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.util.Log;
 
 /**
  * Created by Franktastin4 on 10/24/15.
  */
 public class TimeLimitService extends Service {
 
+    public static final String TAG = "Alarm";
+
     Alarm alarm = new Alarm();
     public void onCreate()
     {
         super.onCreate();
+        Log.d(TAG, "Locking access");
+        // impliment the on click listener
+
+
     }
 
     @Override

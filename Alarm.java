@@ -36,19 +36,29 @@ public class Alarm extends BroadcastReceiver
 
         // Put here YOUR code.
         Log.d(TAG, "Locking Now!");
+        SharedPreferences prefs = context.getSharedPreferences("Time", Context.MODE_PRIVATE);
+        prefs.edit().putInt("LockedBoolean", 1).apply();
+
+        if(prefs.getInt("LockedBoolean", 0) == 1){
+            Log.d(TAG, "Start Serivce");
+            context.startService(new Intent(context, TimeLimitService.class));
+        }else{
+            context.stopService(new Intent(context, TimeLimitService.class));
+            prefs.edit().putInt("LockedBoolean", 0);
+            Log.d(TAG, "Service Stopped");
+
+            CancelAlarm(context);
+            Log.d(TAG, "Alarm Canceled");
+        }
+
+
+
 
         wl.release();
     }
 
     public void SetAlarm(Context context)
     {
-
-        /*
-        Log.d(TAG, "Set Alarm called");
-        AlarmManager am =(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(context, Alarm.class);
-        PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        */
 
         // Get shared preference
         SharedPreferences prefs = context.getSharedPreferences("Time", Context.MODE_PRIVATE);
@@ -65,10 +75,12 @@ public class Alarm extends BroadcastReceiver
 
         Log.d(TAG, "Set Alarm to: " + calender.getTime().toString());
 
-
         AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Alarm.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+
+        // Clear current Alarms
+        CancelAlarm(context);
 
         // Only runs it once
         am.set(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), pi);
