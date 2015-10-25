@@ -81,6 +81,7 @@ public class Alarm extends BroadcastReceiver
         Date date = calender.getTime();
         date.setHours(hour);
         date.setMinutes(minutes);
+        date.setSeconds(0);
         calender.setTime(date);
 
         // Run if not equal to or in past
@@ -101,7 +102,7 @@ public class Alarm extends BroadcastReceiver
     public void CancelAlarm(Context context)
     {
 
-        Log.d(TAG, "Alarm cancled");
+        Log.d(TAG, "Alarm canceled");
         Intent intent = new Intent(context, Alarm.class);
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

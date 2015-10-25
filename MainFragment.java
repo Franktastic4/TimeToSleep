@@ -12,6 +12,7 @@ import android.app.Fragment;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -87,6 +88,20 @@ public class MainFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getActivity().getSupportFragmentManager(), "someTag");
+            }
+        });
+
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                SharedPreferences prefs = getActivity().getSharedPreferences("Time", Context.MODE_PRIVATE);
+                if (prefs.getInt("LockedBoolean", 0) == 1) {
+                    Log.d(TAG, "Touch detected after alarm!");
+                }else{
+                    Log.d(TAG, "Touch detected, but is ok");
+                }
+
+                    return false;
             }
         });
 
